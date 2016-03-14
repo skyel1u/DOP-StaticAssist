@@ -5,6 +5,7 @@ to use:
     /path/to/opt -load /path/to/LLVMDOPModule.so -dop-module /path/to/LLVM_IR_FILE 
 
 optional arguments:
+
     -dyn-dop <file>:
         dynamic assist takes in a file of lines containing
         <function name> <line no>
