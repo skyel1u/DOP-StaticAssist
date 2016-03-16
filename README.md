@@ -6,7 +6,7 @@
 
     add_subdirectory(DOPModule)
 
-3. run cmake in your build folder 
+3. run cmake;make in your build folder 
 
 ### Usage:
     
