@@ -1,7 +1,15 @@
-copy Custom folder into LLVM_PATH/lib
-run make
+### Install
 
-to use:
+0. compile LLVM 3.5 following http://llvm.org/docs/GettingStarted.html
+1. copy DOPModule in Custom folder into LLVM_PATH/lib
+2. add folder DOPModule into the CMakeLists.txt in LLVM_PATH/lib 
+
+    add_subdirectory(DOPModule)
+
+3. run cmake in your build folder 
+
+### Usage:
+    
     /path/to/opt -load /path/to/LLVMDOPModule.so -dop-module /path/to/LLVM_IR_FILE 
 
 optional arguments:
