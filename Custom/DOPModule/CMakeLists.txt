@@ -11,5 +11,5 @@ if(WIN32 OR CYGWIN)
 endif()
 
 add_llvm_loadable_module( LLVMSeeBranch
-  SeeBranch.cpp
+  DOPModule.cpp
   )
