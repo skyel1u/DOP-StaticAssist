@@ -1,6 +1,24 @@
 ### Install
 
 0. compile LLVM 3.5 following http://llvm.org/docs/GettingStarted.html
+```markdown
+* Checkout LLVM:
+cd where-you-want-llvm-to-live
+svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+
+* Checkout Clang:
+cd where-you-want-llvm-to-live
+cd llvm/tools
+svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+
+* build
+
+cd where you want to build llvm
+mkdir build
+cd build
+cmake <path to llvm sources>
+make -j12
+```
 1. copy DOPModule in Custom folder into LLVM_PATH/lib
 2. add folder DOPModule into the CMakeLists.txt in LLVM_PATH/lib 
 
