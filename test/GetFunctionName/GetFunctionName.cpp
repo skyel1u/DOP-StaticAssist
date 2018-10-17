@@ -6,7 +6,6 @@ using namespace llvm;
 
 namespace
 {
-
 struct Test : public FunctionPass
 {
     static char ID;
@@ -21,7 +20,7 @@ struct Test : public FunctionPass
     }
 };
 
-} // namespace
+}
 
 char Test::ID = 0;
 static RegisterPass<Test> X("function-name", "FunctionName.", false, false);
