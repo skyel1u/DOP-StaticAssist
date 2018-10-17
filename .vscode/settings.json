@@ -1,9 +1,6 @@
 {
-    "C_Cpp.intelliSenseEngineFallback": "Enabled",
     "files.associations": {
-        "iostream": "cpp",
-        "iosfwd": "cpp",
-        "ostream": "cpp",
-        "__config": "cpp"
-    }
+        "algorithm": "cpp"
+    },
+    "terminal.integrated.shell.windows": ""
 }
