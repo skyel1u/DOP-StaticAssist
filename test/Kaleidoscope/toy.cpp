@@ -139,9 +139,172 @@ class FunctionAST {
 };
 ///-----end namespace------------
 
-//===----------------------------
-// Main function
-//===----------------------------
+//===----------------------------------------------------------------------===//
+// Parser
+//===----------------------------------------------------------------------===//
+
+/// CurTok/getNextToken - 
+static int CurTok;
+static int getNextToken() {
+    return CurTok = gettok();
+}
+/// Error* - Print Errors
+ExprAST *Error(const char *Str) {fprintf(stderr, "Error: %s\n", Str); return 0; }
+PrototypeAST *ErrorP(const char *Str) {Error(Str); return 0; }
+FunctionAST *ErrorF(const char *Str) {Error(Str); return 0; }
+
+/// numberExpr - Parseing numbers
+static ExprAST *ParseNumberExpr() {
+    ExprAST *Result = new NumberExprAST(NumVal);
+    getNextToken(); /// <-- Consume the numbers
+    return Result;
+}
+
+/// parenExpr - expressions
+static ExprAST *ParseParenExpr() {
+    getNextToken(); /// <-- eat (
+    ExprAST *V = ParseExpression();
+    
+    if (!V) {
+        return 0;
+    }
+    
+    if (CurTok != ')') {
+        return Error("expected ')'");
+    } 
+    getNextToken(); /// <-- eat )
+    return V;
+}
+
+/// identifierExpr - '(' experssions* ')'
+static ExprAST *ParseIdentifierExpr() {
+    std::string IdName = IdentifierStr;
+
+    getNextToken(); // <==
+
+    
+    if (CurTok != '(') {
+        return new VariableExprAST(IdName);
+    }
+
+    // Call
+    getNextToken();
+    std::vector<ExprAST*> Args;
+    
+    if (CurTok != ')') {
+        while(1){
+            ExprAST *Arg = ParseExpression();
+            if (!Arg) {
+                return 0;
+            }
+            Args.push_back(Arg);
+            if (CurTok == ')') {
+                break;
+            }
+
+            if (CurTok != ',') {
+                return Error("Exprected ')' or ',', in argument list");
+            }
+            getNextToken();
+        }
+    }
+    /// eat the ')'
+    getNextToken();
+    return new CallExprAST(IdName, Args);
+}
+
+// Primary
+static ExprAST *ParsePrimary() {
+    switch (CurTok)
+    {
+        default: return Error("unknow token when expecting an expression");
+        case tok_identifier: return ParseIdentifierExpr();
+        case tok_number:     return ParseNumberExpr();
+        case '(':            return ParseParenExpr();
+    }
+}
+
+/// Binary op
+static std::map<char, int> BinopPrecedence;
+
+static int GetTokPrecedence() {
+    if(!isascii(CurTok)) {
+        return -1;
+    }
+    int TokPrec = BinopPrecedence[CurTok];
+    if (TokPrec <= 0) {
+        return -1;
+    }
+    return TokPrec;
+}
+
+/// expressions
+static ExprAST *ParseExpression() {
+    ExprAST *LHS = ParsePrimary();
+    if (!LHS) {
+        return 0;
+    }
+    return ParseBinOpRHS(0, LHS);
+}
+
+/// binary op rhs
+static ExprAST *ParseBinOpRHS(int ExprPrec, ExprAST *LHS) {
+    while(1){
+        int TokPrec = GetTokPrecedence();
+
+        // If
+        if(TokPrec < ExprPrec)
+            return LHS;
+    }
+    
+}
+
+/// prototype
+///   ::= id '(' id* ')'
+static PrototypeAST *ParsePrototype()
+{
+    if (CurTok != tok_identifier)
+        return ErrorP("Expected function name in prototype");
+
+    std::string FnName = IdentifierStr;
+    getNextToken();
+
+    if (CurTok != '(')
+        return ErrorP("Expected '(' in prototype");
+
+    // Read the list of argument names.
+    std::vector<std::string> ArgNames;
+    while (getNextToken() == tok_identifier)
+        ArgNames.push_back(IdentifierStr);
+    if (CurTok != ')')
+        return ErrorP("Expected ')' in prototype");
+
+    // success.
+    getNextToken(); // eat ')'.
+
+    return new PrototypeAST(FnName, ArgNames);
+}
+
+/// definition ::= 'def' prototype expression
+static FunctionAST *ParseDefinition()
+{
+    getNextToken(); // eat def.
+    PrototypeAST *Proto = ParsePrototype();
+    if (Proto == 0)
+        return 0;
+
+    if (ExprAST *E = ParseExpression())
+        return new FunctionAST(Proto, E);
+    return 0;
+}
+
+//===----------------------------------------------------------------------===//
+// Main Function
+//===----------------------------------------------------------------------===//
 int main() {
+    BinopPrecedence['<'] = 10;
+    BinopPrecedence['+'] = 20;
+    BinopPrecedence['-'] = 20;
+    BinopPrecedence['*'] = 40; // highest.
     return 0;
 }
