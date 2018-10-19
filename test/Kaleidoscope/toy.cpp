@@ -298,6 +298,84 @@ static FunctionAST *ParseDefinition()
     return 0;
 }
 
+/// external - 'extern' prototype
+static PrototypeAST * ParseExtern() {
+    getNextToken();
+    return ParsePrototype();
+}
+
+/// toplevelExpr - expressions
+static PrototypeAST *ParseTopLevelExpr() {
+    
+    if (ExprAST *E = ParseExpression() ) {
+        PrototypeAST *Proto = new PrototypeAST("", std::vector<std::string>());
+        return new FunctionAST(Proto, E);
+    }
+    return 0;
+}
+
+//===----------------------------------------------------------------------===//
+// Top-Level parsing
+//===----------------------------------------------------------------------===//
+static void HandleDefinition() {
+    
+    if (ParseDefinition()) {
+        fprintf(stderr, "Parsed a function definition.\n");
+    } 
+    else
+    {
+        getNextToken();
+    }
+}
+
+static void HandleExtern() {
+    
+    if (ParseExtern()) {
+        fprintf(stderr, "Parsed an extern;\n");
+    } 
+    else
+    {
+        getNextToken();
+    }
+}
+
+static void HandleTopLevelExpression() {
+    
+    if (ParseTopLevelExpr()) {
+        fprintf(stderr, "Parsed a top-level expr.\n");
+    } 
+    else
+    {
+        getNextToken();
+    }
+}
+
+/// top ::= definition | external | expression | ';'
+static void MainLoop()
+{
+    while (1)
+    {
+        fprintf(stderr, "ready> ");
+        switch (CurTok)
+        {
+        case tok_eof:
+            return;
+        case ';':
+            getNextToken();
+            break; // ignore top-level semicolons.
+        case tok_def:
+            HandleDefinition();
+            break;
+        case tok_extern:
+            HandleExtern();
+            break;
+        default:
+            HandleTopLevelExpression();
+            break;
+        }
+    }
+}
+
 //===----------------------------------------------------------------------===//
 // Main Function
 //===----------------------------------------------------------------------===//
@@ -306,5 +384,10 @@ int main() {
     BinopPrecedence['+'] = 20;
     BinopPrecedence['-'] = 20;
     BinopPrecedence['*'] = 40; // highest.
+
+    fprintf(stderr, "ready> ");
+    getNextToken();
+    /// Let's go~~~~~~~~~~~
+    MainLoop();
     return 0;
 }
