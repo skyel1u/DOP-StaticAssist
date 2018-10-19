@@ -4,6 +4,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "llvm/IR/Verifier.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+using namespace llvm;
 
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise one
 // of these for known things.
