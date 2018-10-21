@@ -1,9 +1,15 @@
+#include "llvm/IR/Verifier.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <map>
 #include <string>
 #include <vector>
+using namespace llvm;
 
 //===----------------------------------------------------------------------===//
 // Lexer
@@ -80,12 +86,15 @@ namespace {
 class ExprAST {
 public:
   virtual ~ExprAST() {}
+  virtual Value *Codegen() = 0;
 };
 
 /// NumberExprAST - Expression class for numeric literals like "1.0".
 class NumberExprAST : public ExprAST {
+    double Val;
 public:
   NumberExprAST(double val) {}
+  virtual Value *Codegen();
 };
 
 /// VariableExprAST - Expression class for referencing a variable, like "a".
