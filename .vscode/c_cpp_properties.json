@@ -6,7 +6,9 @@
                 "${workspaceFolder}/**",
                 "D:/Work/llvm35/include",
                 "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/ucrt"
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/ucrt",
+                "/usr/include/llvm-3.5",
+                "/usr/include/llvm-c-3.5"
             ],
             "defines": [
                 "_DEBUG",
