@@ -332,6 +332,60 @@ static PrototypeAST *ParseExtern() {
 }
 
 //===----------------------------------------------------------------------===//
+// Code Generation
+//===----------------------------------------------------------------------===//
+static Module *TheModule;
+static IRBuilder<> Builder(getGlobalContext());
+static std::map<std::string, Value*> NamedValues;
+
+Value *ErrorV(const char *Str) { Error(Str); return 0; }
+
+Value *NumberExprAST::Codegen() {
+  return ConstantFP::get(getGlobalContext(), APFloat(Val));
+}
+
+Value *VariableExprAST::Codegen() {
+  Value *V = NamedValues[Name];
+  return V ? V :  ErrorV("unknown variable name!");
+}
+
+Value *BinaryExprAST::Codegen() {
+    Value *L = LHS->Codegen();
+    Value *R = RGS->Codegen();
+    if (L == 0 || R == 0) return 0;
+      switch (Op) {
+        case '+': return Builder.CreateFAdd(L, R, "addtmp");
+        case '-': return Builder.CreateFSub(L, R, "subtmp");
+        case '*': return Builder.CreateFMul(L, R, "multmp");
+        case '<':
+            L = Builder.CreateFCmpULT(L, R, "cmptmp");
+            // Convert bool 0/1 to double 0.0 or 1.0
+            return Builder.CreateUIToFP(L, Type::getDoubleTy(getGlobalContext()),
+                                        "booltmp");
+        default: return ErrorV("invalid binary operator");
+  }
+}
+
+Value *CallExprAST::Codegen() {
+  // Look up the name in the global module table.
+  Function *CalleeF = TheModule->getFunction(Callee);
+  if (CalleeF == 0)
+    return ErrorV("Unknown function referenced");
+
+  // If argument mismatch error.
+  if (CalleeF->arg_size() != Args.size())
+    return ErrorV("Incorrect # arguments passed");
+
+  std::vector<Value*> ArgsV;
+  for (unsigned i = 0, e = Args.size(); i != e; ++i) {
+    ArgsV.push_back(Args[i]->Codegen());
+    if (ArgsV.back() == 0) return 0;
+  }
+
+  return Builder.CreateCall(CalleeF, ArgsV, "calltmp");
+}
+
+//===----------------------------------------------------------------------===//
 // Top-Level parsing
 //===----------------------------------------------------------------------===//
 
