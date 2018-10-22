@@ -1,6 +1,11 @@
 {
     "files.associations": {
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "cstdarg": "cpp",
+        "climits": "cpp",
+        "__config": "cpp",
+        "*.gen": "cpp"
     },
-    "terminal.integrated.shell.windows": ""
+    "terminal.integrated.shell.windows": "",
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
