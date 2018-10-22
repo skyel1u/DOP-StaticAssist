@@ -1,6 +1,24 @@
 ### Install
 
+#### Before
+
+```
+Package	                  Version	    Notes
+GNU Make	              3.79, 3.79.1	Makefile/build processor
+GCC	                      >=4.7.0	    C/C++ compiler1
+python	                  >=2.5	        Automated test suite2
+GNU M4	                  1.4	        Macro processor for configuration3
+GNU Autoconf	          2.60      	Configuration script builder3
+GNU Automake	          1.9.6     	aclocal macro generator3
+libtool                   1.5.22	    Shared library manager3
+zlib	                  >=1.2.3.4	    Compression library4
+```
+Make sure your gcc and g++ version both is **4.8.5**.
+
+#### Begin build llvm system
+
 0. compile LLVM 3.5 following http://llvm.org/docs/GettingStarted.html
+
 ```markdown
 * Checkout LLVM:
 cd where-you-want-llvm-to-live
@@ -19,7 +37,9 @@ cd build
 cmake <path to llvm sources>
 make -j12
 ```
+
 1. copy DOPModule in Custom folder into LLVM_PATH/lib
+
 2. add folder DOPModule into the CMakeLists.txt in LLVM_PATH/lib 
 
     add_subdirectory(DOPModule)
