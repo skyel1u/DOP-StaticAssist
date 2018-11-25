@@ -4,7 +4,8 @@
         "cstdarg": "cpp",
         "climits": "cpp",
         "__config": "cpp",
-        "*.gen": "cpp"
+        "*.gen": "cpp",
+        "xtree": "cpp"
     },
     "terminal.integrated.shell.windows": "",
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
