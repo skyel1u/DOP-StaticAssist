@@ -756,7 +756,7 @@ bool DOPModule::runOnModule(Module &M)
         // read vulnerable function list
         std::vector<std::string> vulnFuncList;
         std::string temp;
-        std::ifstream VF(vuln_path, std::ifstream::in);
+        std::ifstream VF(vuln_path, std::ifstream::in); // <== input vuln function file list?
 
         while(!VF.eof())
         {
@@ -791,6 +791,7 @@ bool DOPModule::runOnModule(Module &M)
                 if (visited.find(F) != visited.end())
                     continue;
                 if (F->isDeclaration())
+                    // 👆如果此全局值主要定义位于当前文件之外则返回true
                     continue;
 
                 visited.insert(F);
@@ -898,6 +899,7 @@ bool DOPModule::runOnModule(Module &M)
                     for (auto &I: **i)
                     {
                         // we have a store, we're going to check it
+                        // 👇储存到寄存器的所有指令
                         if (StoreInst *SI = dyn_cast<StoreInst>(&I))
                         {
                             InstInst ii(SI); 
@@ -907,11 +909,13 @@ bool DOPModule::runOnModule(Module &M)
                                 result[SI] = ii;
                             }
                         }
+                        // 👇 表示函数调用，抽象目标机器的调用约定
                         else if (CallInst *CI = dyn_cast<CallInst>(&I))
                         {
                             // there is a call within the loop
                             // we will get the functions called by this function
                             // and explore all instructions in them
+                            // 👇返回调用的函数，如果是间接函数调用则返回NULL。
                             if (Function *F = CI->getCalledFunction())
                             {
                                 for (auto &BB: *F)
@@ -920,6 +924,7 @@ bool DOPModule::runOnModule(Module &M)
                                     for (auto &I: BB)
                                     {
                                         // we have a store, we're going to check it
+                                        // 👇an instruction for storing to memory
                                         if (StoreInst *SI = dyn_cast<StoreInst>(&I))
                                         {
                                             InstInst ii(SI); 
