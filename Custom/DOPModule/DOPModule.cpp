@@ -668,11 +668,15 @@ bool DOPModule::checkFunction(StringRef functionName)
     }
 }
 
+// 传递闭包，读取其他函数内部变量的函数。
 void DOPModule::transitiveClosure(Module &M)
 {
     // will be using Floyd-Warshall algorithm.
     
     // creating the data structure to store the transitive closure
+
+
+    // -----|---------------------==========================================--|
     std::map<const Instruction *, std::map<const Instruction *, unsigned int> > closure_map;
     std::set<Instruction *> instset;
 

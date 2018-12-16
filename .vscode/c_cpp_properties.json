@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:/Work/llvm35/include",
+                "D:/Work/llvm-3.5.0.include/include",
                 "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0",
                 "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/ucrt",
                 "/home/sk/Work/llvm/include",
