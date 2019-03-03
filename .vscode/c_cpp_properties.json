@@ -5,8 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "D:/Work/llvm-3.5.0.include/include",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/ucrt",
+                "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.17763.0",
+                "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.17763.0\\ucrt",
+                "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\include",
                 "/home/sk/Work/llvm/include",
                 "/usr/include/llvm-3.5",
                 "/usr/include/llvm-c-3.5"

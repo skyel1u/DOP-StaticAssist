@@ -5,7 +5,9 @@
         "climits": "cpp",
         "__config": "cpp",
         "*.gen": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "vector": "cpp",
+        "iostream": "cpp"
     },
     "terminal.integrated.shell.windows": "",
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
