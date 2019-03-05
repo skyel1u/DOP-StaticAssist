@@ -3,6 +3,9 @@
 
 using namespace llvm;
 
+// llvm::cl => command line option processing machinery.
+// cl::opt => 
+
 cl::opt<std::string> dop_dyn("dop-dyn", 
                             cl::init(""),
                             cl::desc("Dynamic dispatch loops."), 
@@ -1000,6 +1003,7 @@ bool DOPModule::runOnModule(Module &M)
 
 void DOPModule::getAnalysisUsage(AnalysisUsage &Info) const
 {
+    // 表示Pass的分析用法信息。
     //Info.addRequired<DOPLoop>();
     Info.addRequired<LoopInfo>();
     Info.addRequiredTransitive<DominatorTreeWrapperPass>();
