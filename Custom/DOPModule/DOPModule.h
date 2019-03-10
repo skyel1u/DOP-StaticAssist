@@ -99,8 +99,9 @@ namespace llvm {
             void Print();
     };
 
-    // llvm::InstVisitor => Base class for instruction visitors.
-    // http://118.25.227.117:9997/llvm6-doxygen/classllvm_1_1InstVisitor.html#details
+    // llvm::Backtrack : llvm::InstVisitor => Base class for instruction visitors.
+    // http://118.25.227.117:9997/llvm6-doxygen/classllvm_1_1InstVisitor.html#details 
+    // class Backtrack : public InstVisitor<Backtrack>
     class Backtrack : public InstVisitor<Backtrack>
     {
         private:
