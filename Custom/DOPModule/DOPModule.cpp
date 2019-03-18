@@ -191,6 +191,7 @@ bool Backtrack::isInteresting()
         else if (dyn_cast<Constant>(ptr))
         {
             // it must be a constant value...
+            // A constant value that is initialized with an expression using other constant values.
             if (ConstantExpr *CE = dyn_cast<ConstantExpr>(ptr))
             {
                 switch (CE->getOpcode())
@@ -730,6 +731,7 @@ void DOPModule::transitiveClosure(Module &M)
 bool DOPModule::runOnModule(Module &M)
 {
     // create the call graph of the module
+    // The basic data container for the call graph of a Module of IR.
     CallGraph CG(M);
 
     // we will calculate the transitive closure of the callgraph
@@ -916,7 +918,7 @@ bool DOPModule::runOnModule(Module &M)
                                 result[SI] = ii;
                             }
                         }
-                        // 👇 表示函数调用，抽象目标机器的调用约定
+                        // 👇 表示函数调用，抽象目标机器的调用约定, dyn_cast => 动态类型转换
                         else if (CallInst *CI = dyn_cast<CallInst>(&I))
                         {
                             // there is a call within the loop
@@ -944,6 +946,7 @@ bool DOPModule::runOnModule(Module &M)
                                     }
 
                                 }
+                                // CallGraphNode => A node in the call graph for a module.
                                 CallGraphNode *CN = CG[F];
                                 for (unsigned int x=0; x<CN->size(); x++)
                                 {
